@@ -204,7 +204,7 @@ static ResolutionPreset getResolutionPresetForString(NSString *preset) {
 - (void)stopVideoRecordingWithResult:(FlutterResult)result;
 - (void)startImageStreamWithMessenger:(NSObject<FlutterBinaryMessenger> *)messenger;
 - (void)stopImageStream;
-- (void)captureToFile:(NSString *)filename result:(FlutterResult)result;
+- (void)captureToFile:(NSString *)filename :(NSNumber *)flash result:(FlutterResult)result;
 @end
 
 @implementation FLTCam {
@@ -272,11 +272,18 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
   [_captureSession stopRunning];
 }
 
-- (void)captureToFile:(NSString *)path result:(FlutterResult)result {
+- (void)captureToFile:(NSString *)path :(NSNumber *)flash  result:(FlutterResult)result {
+    NSLog(flash ? @"Yes" : @"No");
   AVCapturePhotoSettings *settings = [AVCapturePhotoSettings photoSettings];
   if (_resolutionPreset == max) {
     [settings setHighResolutionPhotoEnabled:YES];
   }
+    
+    
+    if (flash) {
+        [settings setFlashMode:AVCaptureFlashModeOn];
+    }
+    
   [_capturePhotoOutput
       capturePhotoWithSettings:settings
                       delegate:[[FLTSavePhotoDelegate alloc] initWithPath:path
@@ -882,7 +889,7 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     NSUInteger textureId = ((NSNumber *)argsMap[@"textureId"]).unsignedIntegerValue;
 
     if ([@"takePicture" isEqualToString:call.method]) {
-      [_camera captureToFile:call.arguments[@"path"] result:result];
+        [_camera captureToFile:call.arguments[@"path"]:call.arguments[@"flash"] result:result];
     } else if ([@"dispose" isEqualToString:call.method]) {
       [_registry unregisterTexture:textureId];
       [_camera close];
