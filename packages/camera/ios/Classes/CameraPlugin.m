@@ -273,14 +273,14 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
 }
 
 - (void)captureToFile:(NSString *)path :(NSNumber *)flash  result:(FlutterResult)result {
-    NSLog(flash ? @"Yes" : @"No");
+    
   AVCapturePhotoSettings *settings = [AVCapturePhotoSettings photoSettings];
   if (_resolutionPreset == max) {
     [settings setHighResolutionPhotoEnabled:YES];
   }
     
     
-    if (flash) {
+    if (flash.boolValue) {
         [settings setFlashMode:AVCaptureFlashModeOn];
     } else {
         [settings setFlashMode:AVCaptureFlashModeOff];

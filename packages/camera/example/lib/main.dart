@@ -449,7 +449,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
     }
 
     try {
-      await controller.takePicture(filePath, flash: true);
+      await controller.takePicture(filePath, flash: false);
     } on CameraException catch (e) {
       _showCameraException(e);
       return null;
