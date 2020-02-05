@@ -282,6 +282,8 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     
     if (flash) {
         [settings setFlashMode:AVCaptureFlashModeOn];
+    } else {
+        [settings setFlashMode:AVCaptureFlashModeOff];
     }
     
   [_capturePhotoOutput
